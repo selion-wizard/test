@@ -1,53 +1,40 @@
-import React from "react";
+import React from 'react';
+import { useCart } from '../contexts/CartContext';
 
-function Card({ image, title, description, price }) {
+const Card = ({ id, image, title, description, price }) => {
+  const { addToCart, isPurchased } = useCart();
+  const purchased = isPurchased(id);
+
+  const handleBuyClick = () => {
+    if (!purchased) {
+      addToCart(id);
+    }
+  };
+
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "16px",
-        width: "250px",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-        margin: "20px auto",
-      }}
-    >
-      <img
-        src={image}
-        alt={title}
-        style={{
-          width: "100%",
-          height: "200px",
-          objectFit: "cover",
-          borderRadius: "4px",
-        }}
-      />
-      <h3 style={{ margin: "12px 0 8px 0" }}>{title}</h3>
-      <p style={{ color: "#666", margin: "8px 0" }}>{description}</p>
-      <p
-        style={{
-          fontSize: "20px",
-          fontWeight: "bold",
-          margin: "8px 0",
-        }}
-      >
-        {price}
-      </p>
-      <button
-        style={{
-          width: "100%",
-          padding: "10px",
-          backgroundColor: "#3498db",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
-        Купить
-      </button>
+    <div className="col-md-6 col-lg-4 mb-4">
+      <div className="card h-100 shadow-sm">
+        <img
+          src={image}
+          className="card-img-top"
+          alt={title}
+          style={{ height: '250px', objectFit: 'cover' }}
+        />
+        <div className="card-body d-flex flex-column">
+          <h5 className="card-title">{title}</h5>
+          <p className="card-text text-muted flex-grow-1">{description}</p>
+          <p className="fw-bold fs-5 mb-3">{price}</p>
+          <button
+            className={`btn ${purchased ? 'btn-success' : 'btn-primary'} w-100`}
+            onClick={handleBuyClick}
+            disabled={purchased}
+          >
+            {purchased ? '✓ Куплено' : 'Купить'}
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Card;
